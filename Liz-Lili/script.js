@@ -1,49 +1,62 @@
 var nth = 1;
 
 var addButton = function() {
-  var text = prompt("What will your button say?");
-  var color;
+  var enterText = {
+    text: null,
+    promptMsg: "What will your button say?",
+    alertText: "Please enter content for your button."
+  };
+
+  var enterColor = {
+    text: null,
+    promptMsg: "Enter color.",
+    alertText: "Please enter a valid color."
+  };
+
+  enterText.text = prompt(enterText.promptMsg);
+
   nth = incrementHeight(nth);
 
-  if(isValidEntry(text)){
-    color = prompt("Enter a color for the button").toLowerCase();
-    isValidColor(isValidEntry(color), text, color, nth);
-  }else{
-    alert("You have enter words to make your button.");
-    text = prompt("What will your button say?");
-    color = prompt("Enter a color for the button").toLowerCase();
-    isValidColor(isValidEntry(color), text, color, nth);
+  var foo = isValidEntry(enterText);
+
+  while(foo === false){
+    entryFail(enterText);
+    foo = isValidEntry(enterText);
   }
 
-};
-
-var incrementHeight = function(n) {
-  return n *= 1.618;
-};
-
-var isValidEntry = function(content){
-  if(content === ""){
-    return false;
+  enterColor.text = prompt(enterColor.promptMsg);
+  foo = isValidEntry(enterColor);
+  while(foo === false){
+    entryFail(enterColor);
+    foo = isValidEntry(enterColor);
   }
-  return true;
+  console.log("out of loop");
+  makeButton(enterText, enterColor, nth);
+
 };
 
-var isValidColor = function(isValid, text, color, nth){
-  if(isValid){
-      makeButton(text, color, nth);
-    }else{
-      alert("Please enter a valid color value.");
-      color = prompt("Enter a color for the button").toLowerCase();
-      makeButton(text, color, nth);
-    }
+ var incrementHeight = function(n) {
+   return n *= 1.618;
+ };
+
+ var isValidEntry = function(entry){
+   if(entry.text !== "" && entry.text !== null){
+     return true;
+   }
+   return false;
+ };
+
+var entryFail = function(entry){
+  alert(entry.alertText);
+  entry.text=prompt(entry.promptMsg);
 };
 
-var makeButton = function(text, color, nth){
+var makeButton = function(enterText, enterColor, nth){
   var newButton = document.createElement('button');
   newButton.setAttribute('onClick', 'addButton()');
 
-  newButton.style.backgroundColor = color;
+  newButton.style.backgroundColor = enterColor.text;
   newButton.style.height = nth +"em";
-  newButton.innerHTML = text;
+  newButton.innerHTML = enterText.text;
   document.querySelector('body').appendChild(newButton);
 };
